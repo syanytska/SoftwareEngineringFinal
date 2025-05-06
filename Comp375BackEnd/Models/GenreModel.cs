@@ -9,5 +9,6 @@ namespace Comp375BackEnd.Models
         [Key]
         public long GenreId { get; set; }
         public string Name { get; set; }
+        public ICollection<MovieModel> Movies { get; set; }
     }
 }

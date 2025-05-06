@@ -13,5 +13,6 @@ namespace Comp375BackEnd.Models
         public string? Title { get; set; }
         [ForeignKey("Genre")]
         public long GenreId { get; set; }
+        public GenreModel Genre { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Comp375BackEnd.Data;
 using Comp375BackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Comp375BackEnd.Controllers.Movie
 {
@@ -54,6 +55,37 @@ namespace Comp375BackEnd.Controllers.Movie
                 return BadRequest();
             }
         }
+        [HttpGet("[action]")]
+        public IActionResult GetMoviesByGenre(string genre)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(genre))
+                {
+                    _logger.LogWarning("Genre string is null or empty.");
+                    return BadRequest("Genre must be provided.");
+                }
+
+                var movies = _context.Movie
+                    .Where(m => m.Genre != null && m.Genre.Name.ToLower() == genre.ToLower())
+                    .ToList();
+
+                if (movies.Count == 0)
+                {
+                    _logger.LogWarning($"No movies found for genre: {genre}");
+                    return NotFound(); // 404
+                }
+
+                return Ok(movies);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError("Error message: " + e.Message);
+                _logger.LogError("Stack trace: " + e.StackTrace);
+                return BadRequest();
+            }
+        }
+
 
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateMovie([FromBody] MovieModel movie)
