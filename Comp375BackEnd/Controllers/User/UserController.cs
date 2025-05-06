@@ -62,14 +62,14 @@ namespace Comp375BackEnd.Controllers.User
                     return BadRequest("Invalid user data");
 
                 var existingUser = _context.User.FirstOrDefault(u => u.Username == user.Username); // finds the user by username
-                
+
                 if (existingUser != null)
                     return Conflict("User already exists");
-                
+
                 // else
                 _context.User.Add(user);
                 _context.SaveChanges(); // save changes 
-                
+
                 return CreatedAtAction(nameof(GetUsers), new { id = user.UserId }, user);
             }
             catch (Exception e)
@@ -91,20 +91,20 @@ namespace Comp375BackEnd.Controllers.User
                 }
 
                 var item = _context.User.Find(id); // find the item async
-                
+
                 if (item == null) // if the item isn't found -> return 404
                 {
                     _logger.LogWarning($"Id not found: {id}");
                     return NotFound();
                 }
-                
+
                 item.Username = user.Username; // update the item
                 item.PasswordHash = user.PasswordHash;
                 item.Email = user.Email;
                 item.PhoneNumber = user.PhoneNumber;
-                
+
                 _context.SaveChanges(); // save changes
-                
+
                 return NoContent(); // 204
             }
             catch (Exception e)
@@ -141,4 +141,5 @@ namespace Comp375BackEnd.Controllers.User
                 return BadRequest();
             }
         }
+    }
 }
