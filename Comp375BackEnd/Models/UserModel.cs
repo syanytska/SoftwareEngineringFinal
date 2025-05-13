@@ -14,5 +14,7 @@ namespace Comp375BackEnd.Models
         public string? PhoneNumber { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        [ForeignKey("Role")]
+        public long? RoleId { get; set; }
     }
 }

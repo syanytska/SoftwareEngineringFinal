@@ -1,5 +1,6 @@
 ﻿using Comp375BackEnd.Data;
 using Comp375BackEnd.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ namespace Comp375BackEnd.Controllers.Movie
             _logger = logger;
             _context = context;
         }
+        [Authorize(Roles = "Admin, User, Guest")] // all users can access this endpoint
         [HttpGet("[action]")]
         public IActionResult GetMovies()
         {
@@ -34,7 +36,9 @@ namespace Comp375BackEnd.Controllers.Movie
             }
         }
 
+
         [HttpGet("[action]")]
+        [Authorize(Roles = "Admin, User, Guest")] // all users can access this endpoint
         public async Task<IActionResult> GetMoviesById(long id)
         {
             try
@@ -55,6 +59,7 @@ namespace Comp375BackEnd.Controllers.Movie
                 return BadRequest();
             }
         }
+        [Authorize(Roles = "Admin, User, Guest")] // all users can access this endpoint
         [HttpGet("[action]")]
         public IActionResult GetMoviesByGenre(string genre)
         {
@@ -86,7 +91,7 @@ namespace Comp375BackEnd.Controllers.Movie
             }
         }
 
-
+        [Authorize(Roles = "Admin")] // only admin can access this endpoint
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateMovie([FromBody] MovieModel movie)
         {
@@ -110,6 +115,7 @@ namespace Comp375BackEnd.Controllers.Movie
             }
         }
 
+        [Authorize(Roles = "Admin")] // only admin can access this endpoint
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateMovie(long id, [FromBody] MovieModel movie)
         {
@@ -140,6 +146,8 @@ namespace Comp375BackEnd.Controllers.Movie
                 return BadRequest();
             }
         }
+
+        [Authorize(Roles = "Admin")] // only admin can access this endpoint
         [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteMovie(long id)
         {

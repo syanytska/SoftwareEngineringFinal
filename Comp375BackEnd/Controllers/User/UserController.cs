@@ -80,28 +80,28 @@ namespace Comp375BackEnd.Controllers.User
         }
 
         [HttpPut("[action]")]
-        public IActionResult UpdateUser(long id, [FromBody] UserModel user)
+        public IActionResult UpdateUser(long id, [FromBody] UserModel model)
         {
             try
             {
-                if (id != user.UserId) // if the id doesn't match the user id -> return 400
+                if (id != model.UserId) // if the id doesn't match the user id -> return 400
                 {
                     _logger.LogWarning("Id mismatch");
                     return BadRequest();
                 }
 
-                var item = _context.User.Find(id); // find the item async
+                var user = _context.User.Find(id); // find the item async
 
-                if (item == null) // if the item isn't found -> return 404
+                if (user == null) // if the item isn't found -> return 404
                 {
                     _logger.LogWarning($"Id not found: {id}");
                     return NotFound();
                 }
 
-                item.Username = user.Username; // update the item
-                item.PasswordHash = user.PasswordHash;
-                item.Email = user.Email;
-                item.PhoneNumber = user.PhoneNumber;
+                user.Username = model.Username; // update the item
+                user.PasswordHash = model.PasswordHash;
+                user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
 
                 _context.SaveChanges(); // save changes
 
@@ -120,16 +120,16 @@ namespace Comp375BackEnd.Controllers.User
         {
             try
             {
-                var item = _context.User.Find(id); // find the item async
+                var user = _context.User.Find(id); // find the item async
 
-                if (item == null) // if the item isn't found -> return 404
+                if (user == null) // if the item isn't found -> return 404
                 {
                     _logger.LogWarning($"Id not found: {id}");
                     return NotFound();
                 }
 
                 // else
-                _context.User.Remove(item);
+                _context.User.Remove(user);
                 _context.SaveChanges(); // save changes
 
                 return NoContent(); // 204
